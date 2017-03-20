@@ -25,9 +25,9 @@ while library in threading.enumerate():
 vecs_base = {}
 for group in groups_base:
     analyser = Analyser.Tree_analyser(groups_base[group])
-    vect = analyser.take_vect()
-    vecs_base[group] = vect
-    print(vect)
+    vec = analyser.take_vect()
+    vecs_base[group] = vec
+    print(vec)
 
 if __name__ == "__main__":
     pass
