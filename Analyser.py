@@ -17,8 +17,7 @@ class Tree_analyser():
         vecs = []
         good_words = []
         # words_list = []
-        print()
-        words_list
+        print(words_list)
         for word in words_list:
             # word = word.replace('\n', '')
             # print (word)
