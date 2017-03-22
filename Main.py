@@ -3,6 +3,7 @@ import Social_group_parser
 import Analyser
 import Posts_parser
 import time
+from Reclam_worker import Reclam_taker
 import getpass
 
 library = threading.Thread(target=Analyser.library_prepearing)
@@ -10,8 +11,6 @@ library.setDaemon(True)
 
 login = u'zander5@mail.ru'
 password = u'arektar561'
-
-
 
 while library in threading.enumerate():
     time.sleep(1)
@@ -38,21 +37,21 @@ if __name__ == "__main__":
             groups_parser = Social_group_parser.VkParser(login, password)
             while action not in actions_dict[1]:
                 print("Выберите ограничения:")
-                print("\t1. Получить только тематические сообщества")
-                print("\t2. Получить тематические сообщества и сообщества данного пользователя")
+                print("\t1. Получить тематические сообщества и сообщества данного пользователя")
+                print("\t2. Получить только тематические сообщества")
                 print("\t3. Получить только сообщества данного пользователя")
                 print("\t4. Назад")
                 action = int(input("Выберите пункт меню: "))
                 if action not in actions_dict[1]:
                     print("Такого пункта в меню нет")
             if action == 1:
-                VK_groups_dict = groups_parser.get_new_groups_posts()  # Параметры!!!
+                VK_groups_dict = groups_parser.get_new_groups_posts(1)
 
             elif action == 2:
-                VK_groups_dict = groups_parser.get_new_groups_posts()  # Параметры!!!
+                VK_groups_dict = groups_parser.get_new_groups_posts(2)
 
             elif action == 3:
-                VK_groups_dict = groups_parser.get_new_groups_posts()  # Параметры!!!
+                VK_groups_dict = groups_parser.get_new_groups_posts(3)
 
             elif action == 9:
                 break
@@ -68,6 +67,8 @@ if __name__ == "__main__":
                 print(vec)
 
         elif action == 3:
+            reclam_file = Reclam_taker()
+            text = reclam_file.get_text()
             pass
         elif action == 9:
             break

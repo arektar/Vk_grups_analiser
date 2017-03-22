@@ -60,17 +60,27 @@ class VkParser():
         new_groups_list = groups_set.difference(blacklist)
         return new_groups_list
 
-    def get_new_groups(self):
+    def get_new_groups(self, target):
         groups_ids_set = set()
-        groups_ids_set.update(self.get_from_categories())
-        groups_ids_set.update(self.get_user_groups())
+        if target != 3:
+            groups_ids_set.update(self.get_from_categories())
+        if target != 2:
+            groups_ids_set.update(self.get_user_groups())
         print(groups_ids_set)
         new_groups_ids_set = self.check_in_blacklist(groups_ids_set)
         print(new_groups_ids_set)
         return new_groups_ids_set
 
-    def get_new_groups_posts(self):
-        new_groups_ids_set = self.get_new_groups()
+    def get_new_groups_posts(self, target):
+        """
+        :param target:
+        1 - user and them
+        2 - them
+        3 - user
+        :return:
+        groups posts base
+        """
+        new_groups_ids_set = self.get_new_groups(target)
         groups_posts_base = {}
         try:
             groups_data = self.vk_api.groups.getById(group_ids=list(new_groups_ids_set))
@@ -87,7 +97,7 @@ class VkParser():
                         posts = "Closed_Wall"
                     else:
                         raise
-                except requests.exceptions.ReadTimeout:  #Не дождались ответа от ВК
+                except requests.exceptions.ReadTimeout:  # Не дождались ответа от ВК
                     time.sleep(0.5)
                     name = group_data[u'name']
                     posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
@@ -99,4 +109,4 @@ class VkParser():
 
 if __name__ == "__main__":
     my_SW_parser = VkParser('zander5@mail.ru', "Arektar561")
-    my_SW_parser.get_new_groups_posts()
+    my_SW_parser.get_new_groups_posts(1)
