@@ -4,7 +4,7 @@ import pymorphy2
 
 class Text_analyser():
     def __init__(self):
-        self.ps_good_table = {"NOUN": b"_S", "ADJF": b"_A", "VERB": b"_V", "INFN": b"_V"}
+        self.ps_good_table = {"NOUN": "_S", "ADJF": "_A", "VERB": "_V", "INFN": "_V"}
         """
         pymorph word2vec
         NOUN    _S  	имя существительное	хомяк
@@ -28,7 +28,7 @@ class Text_analyser():
         self.morph = pymorphy2.MorphAnalyzer()
         pass
 
-    def run(self, groups_posts_dict):
+    def prepare_posts_text(self, groups_posts_dict):
         groups_base = {}
         for group in groups_posts_dict:
             posts = groups_posts_dict[group]
@@ -38,7 +38,7 @@ class Text_analyser():
                 parse_result = self.prepareText(text)
                 if parse_result: groups_base[group].append(parse_result)
                 # print(text)
-            print(groups_base)
+        print(groups_base)
 
         return groups_base
 
@@ -127,3 +127,20 @@ class Text_analyser():
                 dict_tag = dict_tag + self.ps_good_table[ps]
                 if dict_tag: dict_tags.append(dict_tag)
         return dict_tags
+
+
+if __name__ == "__main__":
+
+    parser = Text_analyser()
+    VK_groups_dict = {"Test_groupe": [{"text":"""Разработка системы имеет своей целью улучшение эффективности
+    рекламы путем выявления сообществ, подходящих заданной рекламе по своей тематике, что позволит качественно
+    улучшить рекламирование в сообществах социальных сетей. Поскольку анализ основан на ежемесячной выборке сообщений,
+    появляющихся на странице социальной группы, программа определяет актуальную на данный момент тематику этой группы.
+    """}]}
+    groups_base = parser.prepare_posts_text(VK_groups_dict)
+
+    import  Analyser
+    Analyser.library_prepearing()
+    analyser = Analyser.Tree_analyser()
+    vecs = analyser.take_groups_vecs(groups_base)
+    print(vecs)

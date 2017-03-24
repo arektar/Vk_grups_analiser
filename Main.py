@@ -10,7 +10,7 @@ library = threading.Thread(target=Analyser.library_prepearing)
 library.setDaemon(True)
 
 login = u'zander5@mail.ru'
-password = u'arektar561'
+password = u'Arektar561'
 
 while library in threading.enumerate():
     time.sleep(1)
@@ -35,6 +35,7 @@ if __name__ == "__main__":
             # login=getpass.getpass("Введите логин аккаунта vk.com")
             # password=getpass.getpass("Введите пароль аккаунта vk.com")
             groups_parser = Social_group_parser.VkParser(login, password)
+            action = 0
             while action not in actions_dict[1]:
                 print("Выберите ограничения:")
                 print("\t1. Получить тематические сообщества и сообщества данного пользователя")
@@ -46,18 +47,26 @@ if __name__ == "__main__":
                     print("Такого пункта в меню нет")
             if action == 1:
                 VK_groups_dict = groups_parser.get_new_groups_posts(1)
+                # print(VK_groups_dict)
+                pass
 
             elif action == 2:
                 VK_groups_dict = groups_parser.get_new_groups_posts(2)
+                # print(VK_groups_dict)
+                pass
 
             elif action == 3:
                 VK_groups_dict = groups_parser.get_new_groups_posts(3)
+                # print(VK_groups_dict)
+                pass
 
             elif action == 9:
                 break
+            action = 0
         elif action == 2:
             parser = Posts_parser.Text_analyser()
-            groups_base = parser.run(VK_groups_dict)
+            VK_groups_dict = {VK_groups_dict.keys()[0]: VK_groups_dict[VK_groups_dict.keys()[0]]}
+            groups_base = parser.prepare_posts_text(VK_groups_dict)
 
             vecs_base = {}
             for group in groups_base:
@@ -69,6 +78,7 @@ if __name__ == "__main__":
         elif action == 3:
             reclam_file = Reclam_taker()
             text = reclam_file.get_text()
-            pass
+
         elif action == 9:
             break
+        action = 0

@@ -1,5 +1,6 @@
 # -*- coding: utf-8-*-
 from gensim.models.word2vec import Word2Vec
+import gensim
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
@@ -7,9 +8,8 @@ import os
 
 
 class Tree_analyser():
-    def __init__(self, for_analyse):
+    def __init__(self):
         global model
-        self.tree = for_analyse
         self.model = model
         self.ts = TSNE(2)
 
@@ -25,7 +25,7 @@ class Tree_analyser():
                 vecs.append(self.model[word].reshape((1, 300)))
                 good_words.append(word)
             except KeyError:
-                print (b"key error: " + word)
+                print ("key error: " + word)
                 # print (self.model[word].reshape((1,300)))
 
         if vecs: vecs = np.concatenate(vecs)
@@ -41,23 +41,31 @@ class Tree_analyser():
             i += 1
         return np.array(middle_veclist, dtype='float')
 
-    def take_vect(self):
-        posts_vects = []
-        for post in self.tree:
-            sentance_vects = []
-            for setence in post:
-                word_vects, words = self.getWordVecs(setence)
-                if len(word_vects) < 1: continue
-                sentance_vects.append(
-                    self.middleVect(word_vects))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            posts_vects.append(
-                self.middleVect(sentance_vects))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return self.middleVect(posts_vects)
+    def take_groups_vecs(self, groups_base):
+        vecs_base={}
+        for group in groups_base:
+            posts_vects = []
+            for post in groups_base[group]:
+                sentance_vects = []
+                for setence in post:
+                    word_vects, words = self.getWordVecs(setence)
+                    if len(word_vects) < 1: continue
+                    sentance_vects.append(
+                        self.middleVect(word_vects))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                posts_vects.append(
+                    self.middleVect(sentance_vects))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            vecs_base[group] = self.middleVect(posts_vects)
+        return vecs_base
+
 
 
 def library_prepearing():
     global model
     print("Загрузка начинается")
-    model = Word2Vec.load_word2vec_format(r'ru_dicts\ruscorpora_mean_hs.model.bin', binary=True)
+    model = gensim.models.KeyedVectors.load_word2vec_format(r'ru_dicts\ruscorpora_mean_hs.model.bin', binary=True)
     print("Загрузка завершена")
     return model
+
+
+if __name__ == "__main__":
+    pass

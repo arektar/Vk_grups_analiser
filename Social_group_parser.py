@@ -1,6 +1,7 @@
 # -*- coding: cp1251*-
 import vk
 import time
+import requests
 
 app_id = "5286311"
 
@@ -51,8 +52,11 @@ class VkParser():
         return ids
 
     def prepare_blacklist(self):
+        """
         with open(self.blacklist_path) as blacklist_file:
             blacklist = blacklist_file.read().split('\n')
+        """
+        blacklist = []
         return blacklist
 
     def check_in_blacklist(self, groups_set):
