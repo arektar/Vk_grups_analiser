@@ -1,12 +1,12 @@
 import threading
 import Social_group_parser
-import Analyser
-import Posts_parser
+import Vec_worker
+import Text_parser
 import time
-from Reclam_worker import Reclam_taker
+from File_worker import Reclam_taker
 import getpass
 
-library = threading.Thread(target=Analyser.library_prepearing)
+library = threading.Thread(target=Vec_worker.library_prepearing)
 library.setDaemon(True)
 
 login = u'zander5@mail.ru'
@@ -64,13 +64,13 @@ if __name__ == "__main__":
                 break
             action = 0
         elif action == 2:
-            parser = Posts_parser.Text_analyser()
+            parser = Text_parser.Text_analyser()
             VK_groups_dict = {VK_groups_dict.keys()[0]: VK_groups_dict[VK_groups_dict.keys()[0]]}
             groups_base = parser.prepare_posts_text(VK_groups_dict)
 
             vecs_base = {}
             for group in groups_base:
-                analyser = Analyser.Tree_analyser(groups_base[group])
+                analyser = Vec_worker.Tree_analyser(groups_base[group])
                 vec = analyser.take_vect()
                 vecs_base[group] = vec
                 print(vec)

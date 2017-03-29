@@ -20,3 +20,18 @@ class Reclam_taker():
         with open(self.reclam_path) as text_file:
             reclam = text_file.read()
         return reclam
+
+
+if __name__ == "__main__":
+    my_taker = Reclam_taker()
+    text = my_taker.get_text()
+    import Text_parser
+    import Vec_worker
+
+    my_text_parser = Text_parser.Text_analyser()
+    words = my_text_parser.prepareText(text)
+
+    Vec_worker.library_prepearing()
+    analyser = Vec_worker.Tree_analyser()
+    vecs = analyser.take_words_vec(words)
+    print(vecs)
