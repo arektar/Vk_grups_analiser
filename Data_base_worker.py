@@ -159,15 +159,330 @@ class DB_worker():
         new_group.wall_update_date = "--"  # time.strftime()
         new_group.vec_update_date = "--"
         self.send_to_base(new_group)
+        self.write_posts_and_walls(new_group.base_id, new_group.wall_update_date, posts)
 
-    def write_posts_and_walls(self):
-        pass
+    def write_posts_and_walls(self, group_id, posts_get_date, posts_list):
+        for post in posts_list:
+            new_post = Posts()
+            new_post.post_id = random.randint(0, 999)
+            new_post.text = post['text']
+            self.send_to_base(new_post)
+            new_wall = Wall()
+            new_wall.wall_id = random.randint(0, 999)
+            new_wall.gr_post_id = new_post.post_id
+            new_wall.group_id = group_id
+            new_wall.wall_update_date = posts_get_date
+            self.send_to_base(new_wall)
 
     def get_blasclist(self):
         pass
 
-    def write_vec_story(self):
-        pass
+    def write_vec_story(self, group_id, vec_update_date, vec):
+        new_vec = Vecs_Story()
+        new_vec.vec_id = random.randint(0, 999)
+        new_vec.group_id = group_id
+        new_vec.vec_update_date = vec_update_date
+        new_vec.v1 = vec[0]
+        new_vec.v2 = vec[1]
+        new_vec.v3 = vec[2]
+        new_vec.v4 = vec[3]
+        new_vec.v5 = vec[4]
+        new_vec.v6 = vec[5]
+        new_vec.v7 = vec[6]
+        new_vec.v8 = vec[7]
+        new_vec.v9 = vec[8]
+        new_vec.v10 = vec[9]
+        new_vec.v11 = vec[10]
+        new_vec.v12 = vec[11]
+        new_vec.v13 = vec[12]
+        new_vec.v14 = vec[13]
+        new_vec.v15 = vec[14]
+        new_vec.v16 = vec[15]
+        new_vec.v17 = vec[16]
+        new_vec.v18 = vec[17]
+        new_vec.v19 = vec[18]
+        new_vec.v20 = vec[19]
+        new_vec.v21 = vec[20]
+        new_vec.v22 = vec[21]
+        new_vec.v23 = vec[22]
+        new_vec.v24 = vec[23]
+        new_vec.v25 = vec[24]
+        new_vec.v26 = vec[25]
+        new_vec.v27 = vec[26]
+        new_vec.v28 = vec[27]
+        new_vec.v29 = vec[28]
+        new_vec.v30 = vec[29]
+        new_vec.v31 = vec[30]
+        new_vec.v32 = vec[31]
+        new_vec.v33 = vec[32]
+        new_vec.v34 = vec[33]
+        new_vec.v35 = vec[34]
+        new_vec.v36 = vec[35]
+        new_vec.v37 = vec[36]
+        new_vec.v38 = vec[37]
+        new_vec.v39 = vec[38]
+        new_vec.v40 = vec[39]
+        new_vec.v41 = vec[40]
+        new_vec.v42 = vec[41]
+        new_vec.v43 = vec[42]
+        new_vec.v44 = vec[43]
+        new_vec.v45 = vec[44]
+        new_vec.v46 = vec[45]
+        new_vec.v47 = vec[46]
+        new_vec.v48 = vec[47]
+        new_vec.v49 = vec[48]
+        new_vec.v50 = vec[49]
+        new_vec.v51 = vec[50]
+        new_vec.v52 = vec[51]
+        new_vec.v53 = vec[52]
+        new_vec.v54 = vec[53]
+        new_vec.v55 = vec[54]
+        new_vec.v56 = vec[55]
+        new_vec.v57 = vec[56]
+        new_vec.v58 = vec[57]
+        new_vec.v59 = vec[58]
+        new_vec.v60 = vec[59]
+        new_vec.v61 = vec[60]
+        new_vec.v62 = vec[61]
+        new_vec.v63 = vec[62]
+        new_vec.v64 = vec[63]
+        new_vec.v65 = vec[64]
+        new_vec.v66 = vec[65]
+        new_vec.v67 = vec[66]
+        new_vec.v68 = vec[67]
+        new_vec.v69 = vec[68]
+        new_vec.v70 = vec[69]
+        new_vec.v71 = vec[70]
+        new_vec.v72 = vec[71]
+        new_vec.v73 = vec[72]
+        new_vec.v74 = vec[73]
+        new_vec.v75 = vec[74]
+        new_vec.v76 = vec[75]
+        new_vec.v77 = vec[76]
+        new_vec.v78 = vec[77]
+        new_vec.v79 = vec[78]
+        new_vec.v80 = vec[79]
+        new_vec.v81 = vec[80]
+        new_vec.v82 = vec[81]
+        new_vec.v83 = vec[82]
+        new_vec.v84 = vec[83]
+        new_vec.v85 = vec[84]
+        new_vec.v86 = vec[85]
+        new_vec.v87 = vec[86]
+        new_vec.v88 = vec[87]
+        new_vec.v89 = vec[88]
+        new_vec.v90 = vec[89]
+        new_vec.v91 = vec[90]
+        new_vec.v92 = vec[91]
+        new_vec.v93 = vec[92]
+        new_vec.v94 = vec[93]
+        new_vec.v95 = vec[94]
+        new_vec.v96 = vec[95]
+        new_vec.v97 = vec[96]
+        new_vec.v98 = vec[97]
+        new_vec.v99 = vec[98]
+        new_vec.v100 = vec[99]
+        new_vec.v101 = vec[100]
+        new_vec.v102 = vec[101]
+        new_vec.v103 = vec[102]
+        new_vec.v104 = vec[103]
+        new_vec.v105 = vec[104]
+        new_vec.v106 = vec[105]
+        new_vec.v107 = vec[106]
+        new_vec.v108 = vec[107]
+        new_vec.v109 = vec[108]
+        new_vec.v110 = vec[109]
+        new_vec.v111 = vec[110]
+        new_vec.v112 = vec[111]
+        new_vec.v113 = vec[112]
+        new_vec.v114 = vec[113]
+        new_vec.v115 = vec[114]
+        new_vec.v116 = vec[115]
+        new_vec.v117 = vec[116]
+        new_vec.v118 = vec[117]
+        new_vec.v119 = vec[118]
+        new_vec.v120 = vec[119]
+        new_vec.v121 = vec[120]
+        new_vec.v122 = vec[121]
+        new_vec.v123 = vec[122]
+        new_vec.v124 = vec[123]
+        new_vec.v125 = vec[124]
+        new_vec.v126 = vec[125]
+        new_vec.v127 = vec[126]
+        new_vec.v128 = vec[127]
+        new_vec.v129 = vec[128]
+        new_vec.v130 = vec[129]
+        new_vec.v131 = vec[130]
+        new_vec.v132 = vec[131]
+        new_vec.v133 = vec[132]
+        new_vec.v134 = vec[133]
+        new_vec.v135 = vec[134]
+        new_vec.v136 = vec[135]
+        new_vec.v137 = vec[136]
+        new_vec.v138 = vec[137]
+        new_vec.v139 = vec[138]
+        new_vec.v140 = vec[139]
+        new_vec.v141 = vec[140]
+        new_vec.v142 = vec[141]
+        new_vec.v143 = vec[142]
+        new_vec.v144 = vec[143]
+        new_vec.v145 = vec[144]
+        new_vec.v146 = vec[145]
+        new_vec.v147 = vec[146]
+        new_vec.v148 = vec[147]
+        new_vec.v149 = vec[148]
+        new_vec.v150 = vec[149]
+        new_vec.v151 = vec[150]
+        new_vec.v152 = vec[151]
+        new_vec.v153 = vec[152]
+        new_vec.v154 = vec[153]
+        new_vec.v155 = vec[154]
+        new_vec.v156 = vec[155]
+        new_vec.v157 = vec[156]
+        new_vec.v158 = vec[157]
+        new_vec.v159 = vec[158]
+        new_vec.v160 = vec[159]
+        new_vec.v161 = vec[160]
+        new_vec.v162 = vec[161]
+        new_vec.v163 = vec[162]
+        new_vec.v164 = vec[163]
+        new_vec.v165 = vec[164]
+        new_vec.v166 = vec[165]
+        new_vec.v167 = vec[166]
+        new_vec.v168 = vec[167]
+        new_vec.v169 = vec[168]
+        new_vec.v170 = vec[169]
+        new_vec.v171 = vec[170]
+        new_vec.v172 = vec[171]
+        new_vec.v173 = vec[172]
+        new_vec.v174 = vec[173]
+        new_vec.v175 = vec[174]
+        new_vec.v176 = vec[175]
+        new_vec.v177 = vec[176]
+        new_vec.v178 = vec[177]
+        new_vec.v179 = vec[178]
+        new_vec.v180 = vec[179]
+        new_vec.v181 = vec[180]
+        new_vec.v182 = vec[181]
+        new_vec.v183 = vec[182]
+        new_vec.v184 = vec[183]
+        new_vec.v185 = vec[184]
+        new_vec.v186 = vec[185]
+        new_vec.v187 = vec[186]
+        new_vec.v188 = vec[187]
+        new_vec.v189 = vec[188]
+        new_vec.v190 = vec[189]
+        new_vec.v191 = vec[190]
+        new_vec.v192 = vec[191]
+        new_vec.v193 = vec[192]
+        new_vec.v194 = vec[193]
+        new_vec.v195 = vec[194]
+        new_vec.v196 = vec[195]
+        new_vec.v197 = vec[196]
+        new_vec.v198 = vec[197]
+        new_vec.v199 = vec[198]
+        new_vec.v200 = vec[199]
+        new_vec.v201 = vec[200]
+        new_vec.v202 = vec[201]
+        new_vec.v203 = vec[202]
+        new_vec.v204 = vec[203]
+        new_vec.v205 = vec[204]
+        new_vec.v206 = vec[205]
+        new_vec.v207 = vec[206]
+        new_vec.v208 = vec[207]
+        new_vec.v209 = vec[208]
+        new_vec.v210 = vec[209]
+        new_vec.v211 = vec[210]
+        new_vec.v212 = vec[211]
+        new_vec.v213 = vec[212]
+        new_vec.v214 = vec[213]
+        new_vec.v215 = vec[214]
+        new_vec.v216 = vec[215]
+        new_vec.v217 = vec[216]
+        new_vec.v218 = vec[217]
+        new_vec.v219 = vec[218]
+        new_vec.v220 = vec[219]
+        new_vec.v221 = vec[220]
+        new_vec.v222 = vec[221]
+        new_vec.v223 = vec[222]
+        new_vec.v224 = vec[223]
+        new_vec.v225 = vec[224]
+        new_vec.v226 = vec[225]
+        new_vec.v227 = vec[226]
+        new_vec.v228 = vec[227]
+        new_vec.v229 = vec[228]
+        new_vec.v230 = vec[229]
+        new_vec.v231 = vec[230]
+        new_vec.v232 = vec[231]
+        new_vec.v233 = vec[232]
+        new_vec.v234 = vec[233]
+        new_vec.v235 = vec[234]
+        new_vec.v236 = vec[235]
+        new_vec.v237 = vec[236]
+        new_vec.v238 = vec[237]
+        new_vec.v239 = vec[238]
+        new_vec.v240 = vec[239]
+        new_vec.v241 = vec[240]
+        new_vec.v242 = vec[241]
+        new_vec.v243 = vec[242]
+        new_vec.v244 = vec[243]
+        new_vec.v245 = vec[244]
+        new_vec.v246 = vec[245]
+        new_vec.v247 = vec[246]
+        new_vec.v248 = vec[247]
+        new_vec.v249 = vec[248]
+        new_vec.v250 = vec[249]
+        new_vec.v251 = vec[250]
+        new_vec.v252 = vec[251]
+        new_vec.v253 = vec[252]
+        new_vec.v254 = vec[253]
+        new_vec.v255 = vec[254]
+        new_vec.v256 = vec[255]
+        new_vec.v257 = vec[256]
+        new_vec.v258 = vec[257]
+        new_vec.v259 = vec[258]
+        new_vec.v260 = vec[259]
+        new_vec.v261 = vec[260]
+        new_vec.v262 = vec[261]
+        new_vec.v263 = vec[262]
+        new_vec.v264 = vec[263]
+        new_vec.v265 = vec[264]
+        new_vec.v266 = vec[265]
+        new_vec.v267 = vec[266]
+        new_vec.v268 = vec[267]
+        new_vec.v269 = vec[268]
+        new_vec.v270 = vec[269]
+        new_vec.v271 = vec[270]
+        new_vec.v272 = vec[271]
+        new_vec.v273 = vec[272]
+        new_vec.v274 = vec[273]
+        new_vec.v275 = vec[274]
+        new_vec.v276 = vec[275]
+        new_vec.v277 = vec[276]
+        new_vec.v278 = vec[277]
+        new_vec.v279 = vec[278]
+        new_vec.v280 = vec[279]
+        new_vec.v281 = vec[280]
+        new_vec.v282 = vec[281]
+        new_vec.v283 = vec[282]
+        new_vec.v284 = vec[283]
+        new_vec.v285 = vec[284]
+        new_vec.v286 = vec[285]
+        new_vec.v287 = vec[286]
+        new_vec.v288 = vec[287]
+        new_vec.v289 = vec[288]
+        new_vec.v290 = vec[289]
+        new_vec.v291 = vec[290]
+        new_vec.v292 = vec[291]
+        new_vec.v293 = vec[292]
+        new_vec.v294 = vec[293]
+        new_vec.v295 = vec[294]
+        new_vec.v296 = vec[295]
+        new_vec.v297 = vec[296]
+        new_vec.v298 = vec[297]
+        new_vec.v299 = vec[298]
+        new_vec.v300 = vec[299]
+        self.send_to_base(new_vec)
 
     def send_to_base(self, object):
         self.session.add(object)
@@ -220,10 +535,10 @@ class Groups(Base):
 class Posts(Base):  # !!!!!!
     __tablename__ = "Posts"
     post_id = Column(Integer, primary_key=True)
-    attr1 = Column(String(Post_len))
+    text = Column(String(Post_len))
 
     def __repr__(self):
-        return "<Post(%r)>" % self.attr1
+        return "<Post(%i, %r)>" % self.post_id, self.text
 
 
 class Wall(Base):
@@ -233,6 +548,9 @@ class Wall(Base):
     wall_update_date = Column(String(Date_string_len))
     gr_post_id = Column(String(Post_len), ForeignKey(Posts.post_id))
 
+    def __repr__(self):
+        return "<Post(%i, %i, %r, %i)>" % self.wall_id, self.group_id, self.wall_update_date, self.gr_post_id
+
 
 class Vecs_Story(Base):
     __tablename__ = "Vec_Story"
@@ -240,6 +558,357 @@ class Vecs_Story(Base):
     group_id = Column(Integer, ForeignKey(Groups.base_id))
     vec_update_date = Column(String(Date_string_len))
     v1 = Column(Integer)
+    v2 = Column(Integer)
+    v3 = Column(Integer)
+    v4 = Column(Integer)
+    v5 = Column(Integer)
+    v6 = Column(Integer)
+    v7 = Column(Integer)
+    v8 = Column(Integer)
+    v9 = Column(Integer)
+    v10 = Column(Integer)
+    v11 = Column(Integer)
+    v12 = Column(Integer)
+    v13 = Column(Integer)
+    v14 = Column(Integer)
+    v15 = Column(Integer)
+    v16 = Column(Integer)
+    v17 = Column(Integer)
+    v18 = Column(Integer)
+    v19 = Column(Integer)
+    v20 = Column(Integer)
+    v21 = Column(Integer)
+    v22 = Column(Integer)
+    v23 = Column(Integer)
+    v24 = Column(Integer)
+    v25 = Column(Integer)
+    v26 = Column(Integer)
+    v27 = Column(Integer)
+    v28 = Column(Integer)
+    v29 = Column(Integer)
+    v30 = Column(Integer)
+    v31 = Column(Integer)
+    v32 = Column(Integer)
+    v33 = Column(Integer)
+    v34 = Column(Integer)
+    v35 = Column(Integer)
+    v36 = Column(Integer)
+    v37 = Column(Integer)
+    v38 = Column(Integer)
+    v39 = Column(Integer)
+    v40 = Column(Integer)
+    v41 = Column(Integer)
+    v42 = Column(Integer)
+    v43 = Column(Integer)
+    v44 = Column(Integer)
+    v45 = Column(Integer)
+    v46 = Column(Integer)
+    v47 = Column(Integer)
+    v48 = Column(Integer)
+    v49 = Column(Integer)
+    v50 = Column(Integer)
+    v51 = Column(Integer)
+    v52 = Column(Integer)
+    v53 = Column(Integer)
+    v54 = Column(Integer)
+    v55 = Column(Integer)
+    v56 = Column(Integer)
+    v57 = Column(Integer)
+    v58 = Column(Integer)
+    v59 = Column(Integer)
+    v60 = Column(Integer)
+    v61 = Column(Integer)
+    v62 = Column(Integer)
+    v63 = Column(Integer)
+    v64 = Column(Integer)
+    v65 = Column(Integer)
+    v66 = Column(Integer)
+    v67 = Column(Integer)
+    v68 = Column(Integer)
+    v69 = Column(Integer)
+    v70 = Column(Integer)
+    v71 = Column(Integer)
+    v72 = Column(Integer)
+    v73 = Column(Integer)
+    v74 = Column(Integer)
+    v75 = Column(Integer)
+    v76 = Column(Integer)
+    v77 = Column(Integer)
+    v78 = Column(Integer)
+    v79 = Column(Integer)
+    v80 = Column(Integer)
+    v81 = Column(Integer)
+    v82 = Column(Integer)
+    v83 = Column(Integer)
+    v84 = Column(Integer)
+    v85 = Column(Integer)
+    v86 = Column(Integer)
+    v87 = Column(Integer)
+    v88 = Column(Integer)
+    v89 = Column(Integer)
+    v90 = Column(Integer)
+    v91 = Column(Integer)
+    v92 = Column(Integer)
+    v93 = Column(Integer)
+    v94 = Column(Integer)
+    v95 = Column(Integer)
+    v96 = Column(Integer)
+    v97 = Column(Integer)
+    v98 = Column(Integer)
+    v99 = Column(Integer)
+    v100 = Column(Integer)
+    v101 = Column(Integer)
+    v102 = Column(Integer)
+    v103 = Column(Integer)
+    v104 = Column(Integer)
+    v105 = Column(Integer)
+    v106 = Column(Integer)
+    v107 = Column(Integer)
+    v108 = Column(Integer)
+    v109 = Column(Integer)
+    v110 = Column(Integer)
+    v111 = Column(Integer)
+    v112 = Column(Integer)
+    v113 = Column(Integer)
+    v114 = Column(Integer)
+    v115 = Column(Integer)
+    v116 = Column(Integer)
+    v117 = Column(Integer)
+    v118 = Column(Integer)
+    v119 = Column(Integer)
+    v120 = Column(Integer)
+    v121 = Column(Integer)
+    v122 = Column(Integer)
+    v123 = Column(Integer)
+    v124 = Column(Integer)
+    v125 = Column(Integer)
+    v126 = Column(Integer)
+    v127 = Column(Integer)
+    v128 = Column(Integer)
+    v129 = Column(Integer)
+    v130 = Column(Integer)
+    v131 = Column(Integer)
+    v132 = Column(Integer)
+    v133 = Column(Integer)
+    v134 = Column(Integer)
+    v135 = Column(Integer)
+    v136 = Column(Integer)
+    v137 = Column(Integer)
+    v138 = Column(Integer)
+    v139 = Column(Integer)
+    v140 = Column(Integer)
+    v141 = Column(Integer)
+    v142 = Column(Integer)
+    v143 = Column(Integer)
+    v144 = Column(Integer)
+    v145 = Column(Integer)
+    v146 = Column(Integer)
+    v147 = Column(Integer)
+    v148 = Column(Integer)
+    v149 = Column(Integer)
+    v150 = Column(Integer)
+    v151 = Column(Integer)
+    v152 = Column(Integer)
+    v153 = Column(Integer)
+    v154 = Column(Integer)
+    v155 = Column(Integer)
+    v156 = Column(Integer)
+    v157 = Column(Integer)
+    v158 = Column(Integer)
+    v159 = Column(Integer)
+    v160 = Column(Integer)
+    v161 = Column(Integer)
+    v162 = Column(Integer)
+    v163 = Column(Integer)
+    v164 = Column(Integer)
+    v165 = Column(Integer)
+    v166 = Column(Integer)
+    v167 = Column(Integer)
+    v168 = Column(Integer)
+    v169 = Column(Integer)
+    v170 = Column(Integer)
+    v171 = Column(Integer)
+    v172 = Column(Integer)
+    v173 = Column(Integer)
+    v174 = Column(Integer)
+    v175 = Column(Integer)
+    v176 = Column(Integer)
+    v177 = Column(Integer)
+    v178 = Column(Integer)
+    v179 = Column(Integer)
+    v180 = Column(Integer)
+    v181 = Column(Integer)
+    v182 = Column(Integer)
+    v183 = Column(Integer)
+    v184 = Column(Integer)
+    v185 = Column(Integer)
+    v186 = Column(Integer)
+    v187 = Column(Integer)
+    v188 = Column(Integer)
+    v189 = Column(Integer)
+    v190 = Column(Integer)
+    v191 = Column(Integer)
+    v192 = Column(Integer)
+    v193 = Column(Integer)
+    v194 = Column(Integer)
+    v195 = Column(Integer)
+    v196 = Column(Integer)
+    v197 = Column(Integer)
+    v198 = Column(Integer)
+    v199 = Column(Integer)
+    v200 = Column(Integer)
+    v201 = Column(Integer)
+    v202 = Column(Integer)
+    v203 = Column(Integer)
+    v204 = Column(Integer)
+    v205 = Column(Integer)
+    v206 = Column(Integer)
+    v207 = Column(Integer)
+    v208 = Column(Integer)
+    v209 = Column(Integer)
+    v210 = Column(Integer)
+    v211 = Column(Integer)
+    v212 = Column(Integer)
+    v213 = Column(Integer)
+    v214 = Column(Integer)
+    v215 = Column(Integer)
+    v216 = Column(Integer)
+    v217 = Column(Integer)
+    v218 = Column(Integer)
+    v219 = Column(Integer)
+    v220 = Column(Integer)
+    v221 = Column(Integer)
+    v222 = Column(Integer)
+    v223 = Column(Integer)
+    v224 = Column(Integer)
+    v225 = Column(Integer)
+    v226 = Column(Integer)
+    v227 = Column(Integer)
+    v228 = Column(Integer)
+    v229 = Column(Integer)
+    v230 = Column(Integer)
+    v231 = Column(Integer)
+    v232 = Column(Integer)
+    v233 = Column(Integer)
+    v234 = Column(Integer)
+    v235 = Column(Integer)
+    v236 = Column(Integer)
+    v237 = Column(Integer)
+    v238 = Column(Integer)
+    v239 = Column(Integer)
+    v240 = Column(Integer)
+    v241 = Column(Integer)
+    v242 = Column(Integer)
+    v243 = Column(Integer)
+    v244 = Column(Integer)
+    v245 = Column(Integer)
+    v246 = Column(Integer)
+    v247 = Column(Integer)
+    v248 = Column(Integer)
+    v249 = Column(Integer)
+    v250 = Column(Integer)
+    v251 = Column(Integer)
+    v252 = Column(Integer)
+    v253 = Column(Integer)
+    v254 = Column(Integer)
+    v255 = Column(Integer)
+    v256 = Column(Integer)
+    v257 = Column(Integer)
+    v258 = Column(Integer)
+    v259 = Column(Integer)
+    v260 = Column(Integer)
+    v261 = Column(Integer)
+    v262 = Column(Integer)
+    v263 = Column(Integer)
+    v264 = Column(Integer)
+    v265 = Column(Integer)
+    v266 = Column(Integer)
+    v267 = Column(Integer)
+    v268 = Column(Integer)
+    v269 = Column(Integer)
+    v270 = Column(Integer)
+    v271 = Column(Integer)
+    v272 = Column(Integer)
+    v273 = Column(Integer)
+    v274 = Column(Integer)
+    v275 = Column(Integer)
+    v276 = Column(Integer)
+    v277 = Column(Integer)
+    v278 = Column(Integer)
+    v279 = Column(Integer)
+    v280 = Column(Integer)
+    v281 = Column(Integer)
+    v282 = Column(Integer)
+    v283 = Column(Integer)
+    v284 = Column(Integer)
+    v285 = Column(Integer)
+    v286 = Column(Integer)
+    v287 = Column(Integer)
+    v288 = Column(Integer)
+    v289 = Column(Integer)
+    v290 = Column(Integer)
+    v291 = Column(Integer)
+    v292 = Column(Integer)
+    v293 = Column(Integer)
+    v294 = Column(Integer)
+    v295 = Column(Integer)
+    v296 = Column(Integer)
+    v297 = Column(Integer)
+    v298 = Column(Integer)
+    v299 = Column(Integer)
+    v300 = Column(Integer)
+
+    def __repr__(self):
+        return "<Post(" + ",".join(
+            [self.vec_id, self.group_id, self.vec_update_date + self.v1, str(self.v0), str(self.v1), str(self.v2),
+             str(self.v3), str(self.v4), str(self.v5), str(self.v6), str(self.v7), str(self.v8), str(self.v9),
+             str(self.v10), str(self.v11), str(self.v12), str(self.v13), str(self.v14), str(self.v15), str(self.v16),
+             str(self.v17), str(self.v18), str(self.v19), str(self.v20), str(self.v21), str(self.v22), str(self.v23),
+             str(self.v24), str(self.v25), str(self.v26), str(self.v27), str(self.v28), str(self.v29), str(self.v30),
+             str(self.v31), str(self.v32), str(self.v33), str(self.v34), str(self.v35), str(self.v36), str(self.v37),
+             str(self.v38), str(self.v39), str(self.v40), str(self.v41), str(self.v42), str(self.v43), str(self.v44),
+             str(self.v45), str(self.v46), str(self.v47), str(self.v48), str(self.v49), str(self.v50), str(self.v51),
+             str(self.v52), str(self.v53), str(self.v54), str(self.v55), str(self.v56), str(self.v57), str(self.v58),
+             str(self.v59), str(self.v60), str(self.v61), str(self.v62), str(self.v63), str(self.v64), str(self.v65),
+             str(self.v66), str(self.v67), str(self.v68), str(self.v69), str(self.v70), str(self.v71), str(self.v72),
+             str(self.v73), str(self.v74), str(self.v75), str(self.v76), str(self.v77), str(self.v78), str(self.v79),
+             str(self.v80), str(self.v81), str(self.v82), str(self.v83), str(self.v84), str(self.v85), str(self.v86),
+             str(self.v87), str(self.v88), str(self.v89), str(self.v90), str(self.v91), str(self.v92), str(self.v93),
+             str(self.v94), str(self.v95), str(self.v96), str(self.v97), str(self.v98), str(self.v99), str(self.v100),
+             str(self.v101), str(self.v102), str(self.v103), str(self.v104), str(self.v105), str(self.v106),
+             str(self.v107), str(self.v108), str(self.v109), str(self.v110), str(self.v111), str(self.v112),
+             str(self.v113), str(self.v114), str(self.v115), str(self.v116), str(self.v117), str(self.v118),
+             str(self.v119), str(self.v120), str(self.v121), str(self.v122), str(self.v123), str(self.v124),
+             str(self.v125), str(self.v126), str(self.v127), str(self.v128), str(self.v129), str(self.v130),
+             str(self.v131), str(self.v132), str(self.v133), str(self.v134), str(self.v135), str(self.v136),
+             str(self.v137), str(self.v138), str(self.v139), str(self.v140), str(self.v141), str(self.v142),
+             str(self.v143), str(self.v144), str(self.v145), str(self.v146), str(self.v147), str(self.v148),
+             str(self.v149), str(self.v150), str(self.v151), str(self.v152), str(self.v153), str(self.v154),
+             str(self.v155), str(self.v156), str(self.v157), str(self.v158), str(self.v159), str(self.v160),
+             str(self.v161), str(self.v162), str(self.v163), str(self.v164), str(self.v165), str(self.v166),
+             str(self.v167), str(self.v168), str(self.v169), str(self.v170), str(self.v171), str(self.v172),
+             str(self.v173), str(self.v174), str(self.v175), str(self.v176), str(self.v177), str(self.v178),
+             str(self.v179), str(self.v180), str(self.v181), str(self.v182), str(self.v183), str(self.v184),
+             str(self.v185), str(self.v186), str(self.v187), str(self.v188), str(self.v189), str(self.v190),
+             str(self.v191), str(self.v192), str(self.v193), str(self.v194), str(self.v195), str(self.v196),
+             str(self.v197), str(self.v198), str(self.v199), str(self.v200), str(self.v201), str(self.v202),
+             str(self.v203), str(self.v204), str(self.v205), str(self.v206), str(self.v207), str(self.v208),
+             str(self.v209), str(self.v210), str(self.v211), str(self.v212), str(self.v213), str(self.v214),
+             str(self.v215), str(self.v216), str(self.v217), str(self.v218), str(self.v219), str(self.v220),
+             str(self.v221), str(self.v222), str(self.v223), str(self.v224), str(self.v225), str(self.v226),
+             str(self.v227), str(self.v228), str(self.v229), str(self.v230), str(self.v231), str(self.v232),
+             str(self.v233), str(self.v234), str(self.v235), str(self.v236), str(self.v237), str(self.v238),
+             str(self.v239), str(self.v240), str(self.v241), str(self.v242), str(self.v243), str(self.v244),
+             str(self.v245), str(self.v246), str(self.v247), str(self.v248), str(self.v249), str(self.v250),
+             str(self.v251), str(self.v252), str(self.v253), str(self.v254), str(self.v255), str(self.v256),
+             str(self.v257), str(self.v258), str(self.v259), str(self.v260), str(self.v261), str(self.v262),
+             str(self.v263), str(self.v264), str(self.v265), str(self.v266), str(self.v267), str(self.v268),
+             str(self.v269), str(self.v270), str(self.v271), str(self.v272), str(self.v273), str(self.v274),
+             str(self.v275), str(self.v276), str(self.v277), str(self.v278), str(self.v279), str(self.v280),
+             str(self.v281), str(self.v282), str(self.v283), str(self.v284), str(self.v285), str(self.v286),
+             str(self.v287), str(self.v288), str(self.v289), str(self.v290), str(self.v291), str(self.v292),
+             str(self.v293), str(self.v294), str(self.v295), str(self.v296), str(self.v297), str(self.v298),
+             str(self.v299), str(self.v300)]) + ")>"
 
 
 if __name__ == "__main__":
@@ -2447,7 +3116,8 @@ if __name__ == "__main__":
     ]}
     groups = [{'id': 1331201, 'name': 'Чемпионат | Championat.com', 'screen_name': 'championat', 'is_closed': 0,
                'type': 'page', 'is_admin': 0, 'is_member': 0, 'activity': 'СМИ', 'age_limits': 1,
-               'description': 'Официальная группа Чемпионат.com', 'members_count': 834040, 'site': 'www.championat.com',
+               'description': 'Официальная группа Чемпионат.com', 'members_count': 834040,
+               'site': 'www.championat.com',
                'status': '', 'verified': 1, 'wiki_page': 'Биатлон. Расписание на сезон',
                'photo_50': 'https://pp.userapi.com/c622327/v622327984/4a0be/9X1BixqWf1U.jpg',
                'photo_100': 'https://pp.userapi.com/c622327/v622327984/4a0bd/JqT7gigpYe0.jpg',
@@ -2460,11 +3130,11 @@ if __name__ == "__main__":
     # Post1= Posts(attr1="ma1")
     # print()
     # print(session.query(Posts).first())
-"""
-    db_session = scoped_session(sessionmaker(
-        autocommit=False, autoflush=False, bind=engine))
-    Base.query = db_session.query_property()
-    # connection.execute("commit")
-    Groups.Add_to_base(1132, "link", connection)
-    print()
-"""
+    """
+        db_session = scoped_session(sessionmaker(
+            autocommit=False, autoflush=False, bind=engine))
+        Base.query = db_session.query_property()
+        # connection.execute("commit")
+        Groups.Add_to_base(1132, "link", connection)
+        print()
+    """

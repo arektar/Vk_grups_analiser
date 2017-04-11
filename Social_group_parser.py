@@ -94,12 +94,12 @@ class VkParser():
                        "members_count,self.public_date_label,site,status,verified,wiki_page")
             for group_data in groups_data:
                 try:
-                    name = group_data[u'name']
+                    name = group_data[u'id']
                     posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
                 except vk.exceptions.VkAPIError as error:
                     if error.code == 6:  # Слишком частые запросы
                         time.sleep(0.5)
-                        name = group_data[u'name']
+                        name = group_data[u'id']
                         posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
                     elif error.code == 15:  # Закрытое сообщество
                         posts = "Closed_Wall"
@@ -107,7 +107,7 @@ class VkParser():
                         raise
                 except requests.exceptions.ReadTimeout:  # Не дождались ответа от ВК
                     time.sleep(0.5)
-                    name = group_data[u'name']
+                    name = group_data[u'id']
                     posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
                 groups_posts_base[name] = posts
         except:
