@@ -4,7 +4,9 @@ import gensim
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
+from sklearn.metrics.pairwise import cosine_similarity
 import os
+import scipy
 
 
 class Tree_analyser():
@@ -66,6 +68,16 @@ def library_prepearing():
     model = gensim.models.KeyedVectors.load_word2vec_format(r'ru_dicts\ruscorpora_mean_hs.model.bin', binary=True)
     print("Загрузка завершена")
     return model
+
+
+def find_nearest(number, groups_vecdict, text_vec):  # !!!
+    simularity_dict = {}
+    for vec in groups_vecdict:
+        similarity = cosine_similarity(vec[1], text_vec)
+        simularity_dict[vec] = similarity
+    second = lambda x: x[1]
+    nearest_list = sorted(simularity_dict.items(), key=second, reverse=True)
+    return nearest_list[:number]
 
 
 if __name__ == "__main__":

@@ -144,4 +144,4 @@ if __name__ == "__main__":
     analyser = Vec_worker.Tree_analyser()
     vecs = analyser.take_groups_vecs(groups_base)
     print(vecs)
-    from Data_base_worker import
+    #from Data_base_worker import

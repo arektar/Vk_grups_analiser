@@ -21,6 +21,11 @@ class Reclam_taker():
             reclam = text_file.read()
         return reclam
 
+def write_result(simularity_dict):
+    with open('result.txt') as result_file:
+        for group in simularity_dict:
+            result_file.write(group, )
+
 
 if __name__ == "__main__":
     my_taker = Reclam_taker()
