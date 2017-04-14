@@ -2,7 +2,7 @@
 import vk
 import time
 import requests
-from Data_base_worker import Groups
+from Data_base_worker import DB_worker
 
 app_id = "5286311"
 
@@ -17,6 +17,7 @@ class VkParser():
         )
         self.vk_api = vk.API(self.session, v='5.62')
         self.blacklist_path = blacklist_path
+        self.db_worker = DB_worker()
 
     def get_catalog(self):
         categories = self.vk_api.groups.getCatalogInfo(subcategories=1)['categories']
@@ -52,7 +53,7 @@ class VkParser():
         ids = self.vk_api.groups.get()['items']
         return ids
 
-    def prepare_blacklist(self):
+    #def prepare_blacklist(self):
         """
         with open(self.blacklist_path) as blacklist_file:
             blacklist = blacklist_file.read().split('\n')
@@ -61,7 +62,7 @@ class VkParser():
         return blacklist
 
     def check_in_blacklist(self, groups_set):
-        blacklist = set(self.prepare_blacklist())
+        blacklist = set(self.db_worker.get_blasclist())
         new_groups_list = groups_set.difference(blacklist)
         return new_groups_list
 
@@ -110,9 +111,9 @@ class VkParser():
                     name = group_data[u'id']
                     posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
                 groups_posts_base[name] = posts
+                self.db_worker.write_group_to_base(group_data, groups_posts_base)
         except:
             raise
-        # self.write_to_base(groups_posts_base)
         return groups_posts_base
 
 

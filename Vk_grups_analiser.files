@@ -1,3 +1,5 @@
+login_password.ui
+working.ui
 .gitignore
 .idea/Vk_grups_analiser.iml
 .idea/dataSources.local.xml
@@ -20,5 +22,6 @@ __pycache__/Text_parser.cpython-36.pyc
 mainwindow.ui
 ru_dicts/news_win20.model.bin
 ru_dicts/ruscorpora_mean_hs.model.bin
+start_compare.ui
 test.db
 test.py

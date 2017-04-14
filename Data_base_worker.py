@@ -87,7 +87,7 @@ class DB_worker():
         self.session = Session(bind=self.my_engine)
         Base.metadata.create_all(bind=self.my_engine)
 
-    def write_group_to_base(self, group_data):
+    def write_group_to_base(self, group_data, group_posts):
         new_group = Groups()
         new_group.base_id = random.randint(0, 9999)
         new_group.vk_id = group_data['id']
@@ -159,13 +159,13 @@ class DB_worker():
         new_group.wall_update_date = "--"  # time.strftime()
         new_group.vec_update_date = "--"
         self.send_to_base(new_group)
-        self.write_posts_and_walls(new_group.base_id, new_group.wall_update_date, posts)
+        self.write_posts_and_walls(new_group.base_id, new_group.wall_update_date, group_posts)
 
     def write_posts_and_walls(self, group_id, posts_get_date, posts_list):
         for post in posts_list:
             new_post = Posts()
             new_post.post_id = random.randint(0, 999)
-            new_post.text = post['text']
+            new_post.text = str(post['text'])
             self.send_to_base(new_post)
             new_wall = Wall()
             new_wall.wall_id = random.randint(0, 999)
@@ -175,7 +175,8 @@ class DB_worker():
             self.send_to_base(new_wall)
 
     def get_blasclist(self):
-        pass
+        blacklist = []
+        return blacklist
 
     def write_vec_story(self, group_id, vec_update_date, vec):
         new_vec = Vecs_Story()
@@ -538,7 +539,7 @@ class Posts(Base):  # !!!!!!
     text = Column(String(Post_len))
 
     def __repr__(self):
-        return "<Post(%i, %r)>" % self.post_id, self.text
+        return "<Post(%i, %r)>" % (self.post_id, self.text)
 
 
 class Wall(Base):
@@ -549,7 +550,7 @@ class Wall(Base):
     gr_post_id = Column(String(Post_len), ForeignKey(Posts.post_id))
 
     def __repr__(self):
-        return "<Post(%i, %i, %r, %i)>" % self.wall_id, self.group_id, self.wall_update_date, self.gr_post_id
+        return "<Post(%i, %i, %r, %i)>" % (self.wall_id, self.group_id, self.wall_update_date, self.gr_post_id)
 
 
 class Vecs_Story(Base):
@@ -3123,10 +3124,13 @@ if __name__ == "__main__":
                'photo_100': 'https://pp.userapi.com/c622327/v622327984/4a0bd/JqT7gigpYe0.jpg',
                'photo_200': 'https://pp.userapi.com/c622327/v622327984/4a0bc/tFMHaIZPbCE.jpg'}]
     my_worker = DB_worker()
-    my_worker.write_group_to_base(groups[0])
+    #my_worker.write_group_to_base(groups[0],posts["Lay's"])
     my_engine = sqlalchemy.create_engine(database_full_name)
     session = Session(bind=my_engine, autocommit=True)
-    print(session.query(Groups).first())
+    gr = session.query(Groups).first()
+    posts = session.query(Posts).all()
+    walls = session.query(Wall).all()
+    print()
     # Post1= Posts(attr1="ma1")
     # print()
     # print(session.query(Posts).first())

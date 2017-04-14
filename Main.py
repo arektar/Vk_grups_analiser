@@ -3,6 +3,9 @@ import Social_group_parser
 import Vec_worker
 import Text_parser
 import time
+import sys
+from PyQt5 import QtCore, QtGui, uic, QtWidgets
+from  PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from File_worker import Reclam_taker
 import getpass
 
@@ -16,6 +19,65 @@ while library in threading.enumerate():
     time.sleep(1)
     print('.')
 
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui = uic.loadUi('mainwindow.ui')
+        self.ui.setupUi(self)
+        self.ui.pushButton.clicked.connect(self.add_groups)
+        self.ui.pushButton_2.clicked.connect(self.update_vecs)
+        self.ui.pushButton_3.clicked.connect(self.compare_vecs)
+        self.ui.pushButton_2.setEnabled(False)
+        self.show()
+
+        while True:
+            self.show()
+
+    def add_groups(self):
+        pass
+
+    def update_vecs(self):
+        pass
+
+    def compare_vecs(self):
+        pass
+
+
+class ConnectionPropertiesWindow(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.ui = uic.loadUi('login_password.ui')
+        self.ui.lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.ui.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.ui.buttonBox.accepted.connect(self.check_and_continue)
+
+    def check_and_continue(self):
+        pass
+
+
+class WorkingWindow(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.ui = uic.loadUi('working.ui')
+
+
+class ComparePropertiesWindow(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.ui = uic.loadUi('login_password.ui')
+        self.ui.buttonBox.accepted.connect(self.check_and_continue)
+
+    def check_and_continue(self):
+        pass
+
+
+if __name__ == "__main__":
+    app = QtGui.QGuiApplication(sys.argv)
+    mw = MainWindow()
+    app.exec_()
+    pass
+"""
 if __name__ == "__main__":
     actions_dict = {1: [1, 2, 3, 9], 2: [], 3: [], 9: []}
     print("Добро пожаловать в рекламный анализатор соц. сетей")
@@ -82,3 +144,4 @@ if __name__ == "__main__":
         elif action == 9:
             break
         action = 0
+"""

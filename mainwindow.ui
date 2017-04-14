@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>301</width>
-    <height>354</height>
+    <width>398</width>
+    <height>403</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,13 +19,12 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>271</width>
-      <height>51</height>
+      <width>371</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>Добро пожаловать в латентно - семантический
- анализатор соц. сетей на основе Word2Vec.</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Добро пожаловать в латентно - семантический&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt; анализатор соц. сетей на основе Word2Vec.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -33,8 +32,8 @@
      <rect>
       <x>20</x>
       <y>80</y>
-      <width>244</width>
-      <height>211</height>
+      <width>341</width>
+      <height>231</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -68,7 +67,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>301</width>
+     <width>398</width>
      <height>21</height>
     </rect>
    </property>
