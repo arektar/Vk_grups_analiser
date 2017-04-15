@@ -61,6 +61,9 @@ class Tree_analyser():
                 self.middleVect(word_vects))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return self.middleVect(sentance_vects)
 
+    def start(self, work_wind):
+        pass
+
 
 def library_prepearing():
     global model
