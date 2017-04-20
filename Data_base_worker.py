@@ -22,7 +22,8 @@ Status_len = 255
 Post_len = 500
 Vec_column_len = 1000
 metadata = MetaData
-database_path = 'test.db'
+my_path = __file__[:__file__.rfind('\\') + 1]
+database_path =  my_path + 'test.db'
 database_full_name = 'sqlite:///' + database_path
 """
 Groups_table = Table('Groups', metadata,
@@ -156,7 +157,7 @@ class DB_worker():
             new_group.wiki_page = group_data['wiki_page']
         else:
             new_group.wiki_page = '--'
-        new_group.wall_update_date = "--"  # time.strftime()
+        new_group.wall_update_date = time.ctime(time.time())
         new_group.vec_update_date = "--"
         self.send_to_base(new_group)
         self.write_posts_and_walls(new_group.base_id, new_group.wall_update_date, group_posts)
@@ -178,7 +179,8 @@ class DB_worker():
         blacklist = []
         return blacklist
 
-    def write_vec_story(self, group_id, vec_update_date, vec):
+    def write_vec_story(self, group_id, vec):
+        vec_update_date = time.ctime(time.time())
         new_vec = Vecs_Story()
         new_vec.vec_id = random.randint(0, 999)
         new_vec.group_id = group_id
@@ -492,6 +494,24 @@ class DB_worker():
     def close(self):
         self.session.close()
 
+    def get_walls(self):
+        gr = self.session.query(Groups).all()
+        #posts = self.session.query(Posts).all()
+        walls = self.session.query(Wall).all()
+        result = {}
+        for group in gr:
+            posts_data = []
+            for wall in walls:
+                if wall.group_id == group.base_id:
+                    post_data = self.session.execute('select * from Posts WHERE post_id = ' + str(wall.gr_post_id))
+                    posts_data.append(post_data.fetchall()[0]._row[1])
+            result[group.base_id] = posts_data
+        return result
+
+    def get_vecs(self):
+        pass
+
+
 
 class Groups(Base):
     __tablename__ = "Group"
@@ -550,7 +570,7 @@ class Wall(Base):
     gr_post_id = Column(String(Post_len), ForeignKey(Posts.post_id))
 
     def __repr__(self):
-        return "<Post(%i, %i, %r, %i)>" % (self.wall_id, self.group_id, self.wall_update_date, self.gr_post_id)
+        return "<Wall(%i, %i, %r, %i)>" % (self.wall_id, self.group_id, self.wall_update_date, self.gr_post_id)
 
 
 class Vecs_Story(Base):
@@ -860,7 +880,7 @@ class Vecs_Story(Base):
     v300 = Column(Integer)
 
     def __repr__(self):
-        return "<Post(" + ",".join(
+        return "<Vec_story(" + ",".join(
             [self.vec_id, self.group_id, self.vec_update_date + self.v1, str(self.v0), str(self.v1), str(self.v2),
              str(self.v3), str(self.v4), str(self.v5), str(self.v6), str(self.v7), str(self.v8), str(self.v9),
              str(self.v10), str(self.v11), str(self.v12), str(self.v13), str(self.v14), str(self.v15), str(self.v16),
@@ -3127,10 +3147,13 @@ if __name__ == "__main__":
     #my_worker.write_group_to_base(groups[0],posts["Lay's"])
     my_engine = sqlalchemy.create_engine(database_full_name)
     session = Session(bind=my_engine, autocommit=True)
-    gr = session.query(Groups).first()
+    gr = session.query(Groups).all()
     posts = session.query(Posts).all()
     walls = session.query(Wall).all()
+    vecs = session.query(Vecs_Story).all()
     print()
+    base = my_worker.get_walls()
+    print(base)
     # Post1= Posts(attr1="ma1")
     # print()
     # print(session.query(Posts).first())

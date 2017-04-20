@@ -1,5 +1,7 @@
 # -*- coding: cp1251*-
 import pymorphy2
+import Data_base_worker
+import Vec_worker
 
 
 class Text_analyser():
@@ -128,20 +130,40 @@ class Text_analyser():
                 if dict_tag: dict_tags.append(dict_tag)
         return dict_tags
 
+    def start(self, work_wind):
+        my_vec_taker = Vec_worker.Tree_analyser()
+        my_db_worker = Data_base_worker.DB_worker()
+        base = my_db_worker.get_walls()
+        prepared_groups_texts = {}
+        #work_wind.progress.value = 10
+        for group in base:
+            wall = base[group]
+            prepared_groups_texts[group] = []
+            for post in wall:
+                prepared_post_text = self.prepareText(post)
+                prepared_groups_texts[group].append(prepared_post_text)
+        vec_base = my_vec_taker.take_groups_vecs(prepared_groups_texts)
+        for group in vec_base:
+            my_db_worker.write_vec_story(group,vec_base[group])
+
 
 if __name__ == "__main__":
+    Vec_worker.library_prepearing("dd",(__file__[:__file__.rfind('\\') + 1] + r'ru_dicts\ruscorpora_mean_hs.model.bin'))
+    parser = Text_analyser()
+    parser.start('nn')
 
     parser = Text_analyser()
-    VK_groups_dict = {"Test_groupe": [{"text":"""Разработка системы имеет своей целью улучшение эффективности
+    VK_groups_dict = {"Test_groupe": [{"text": """Разработка системы имеет своей целью улучшение эффективности
     рекламы путем выявления сообществ, подходящих заданной рекламе по своей тематике, что позволит качественно
     улучшить рекламирование в сообществах социальных сетей. Поскольку анализ основан на ежемесячной выборке сообщений,
     появляющихся на странице социальной группы, программа определяет актуальную на данный момент тематику этой группы.
     """}]}
     groups_base = parser.prepare_posts_text(VK_groups_dict)
 
-    import  Vec_worker
-    Vec_worker.library_prepearing()
+    import Vec_worker
+
+    Vec_worker.library_prepearing("obj",__file__[:__file__.rfind('\\') + 1] + r'ru_dicts\ruscorpora_mean_hs.model.bin')
     analyser = Vec_worker.Tree_analyser()
     vecs = analyser.take_groups_vecs(groups_base)
     print(vecs)
-    #from Data_base_worker import
+    # from Data_base_worker import

@@ -2,59 +2,59 @@ import threading
 import Social_group_parser
 import Vec_worker
 import Text_parser
+import File_worker
+import Data_base_worker
 import time
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from File_worker import Reclam_taker
 import getpass
-
-library = threading.Thread(target=Vec_worker.library_prepearing)
-library.setDaemon(True)
+import os
 
 login = u'zander5@mail.ru'
 password = u'Arektar561'
-
-while library in threading.enumerate():
-    time.sleep(1)
-    print('.')
+dict_path = __file__[:__file__.rfind('\\') + 1] + r'ru_dicts\ruscorpora_mean_hs.model.bin'
+app = QApplication(sys.argv)
+my_path = __file__[:__file__.rfind('\\') + 1]
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.ui = uic.loadUi('mainwindow.ui')
-        self.ui.setupUi(self)
+        ui_path = my_path + 'mainwindow.ui'
+        self.ui = uic.loadUi(ui_path, self)
+        # self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.add_groups)
         self.ui.pushButton_2.clicked.connect(self.update_vecs)
         self.ui.pushButton_3.clicked.connect(self.compare_vecs)
         self.ui.pushButton_2.setEnabled(False)
-        self.show()
+        #self.show()
 
     def add_groups(self):
         con_wind = ConnectionPropertiesWindow()
-        con_wind.show()
 
     def update_vecs(self):
         work_wind = WorkingWindow()
-        work_wind.show()
+
+        my_text_worker = Text_parser.Text_analyser()
+        groups_base = my_text_worker.start(work_wind)
 
         my_vec_taker = Vec_worker.Tree_analyser()
-        my_vec_taker.start(work_wind)
-
+        my_vec_taker.start(work_wind, groups_base)
 
     def compare_vecs(self):
-        compare_wind = ComparePropertiesWindow()
-        compare_wind.show()
+        ComparePropertiesWindow()
 
 
 class ConnectionPropertiesWindow(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.ui = uic.loadUi('login_password.ui')
+        self.ui = uic.loadUi( my_path + 'login_password.ui', self)
         self.ui.lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
         self.ui.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)
         self.ui.buttonBox.accepted.connect(self.check_and_continue)
+        self.show()
 
     def check(self):
         user_login = self.ui.lineEdit.text
@@ -90,42 +90,61 @@ class ConnectionPropertiesWindow(QDialog):
 class WorkingWindow(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.ui = uic.loadUi('working.ui')
+        self.ui = uic.loadUi(my_path + 'working.ui', self)
         self.progress = self.ui.progressBar
         self.info = self.ui.label
+        self.show()
 
 
 class ComparePropertiesWindow(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.ui = uic.loadUi('login_password.ui')
-        self.ui.buttonBox.accepted.connect(self.check_and_continue)
+        self.ui = uic.loadUi(my_path + 'login_password.ui', self)
+        self.ui.buttonBox.accepted.connect(self.check)
+        self.show()
 
     def check(self):
         if (self.ui.textBrowser.text == '') or (self.ui.lineEdit.text == ''):
             self.ui.error_lable.text = "Введите текст \nили путь к текстовону \nфайлу"
         elif self.ui.spinBox.value == 0:
             self.ui.error_lable.text = "Выбарите количество \nискомых сообществ"
-        elif (self.ui.textBrowser.text != '') or (self.ui.lineEdit.text != ''):
+        elif (self.ui.users_text.text != '') or (self.ui.lineEdit.text != ''):
             self.ui.error_lable.text = "Сравнивается только один текст. \nСотрите либо текст, либо путь к файлу."
         else:
             self.start()
 
     def start(self):
-        pass
+
+        text = self.ui.textBrowser.text != ''
+        if not text:
+            my_file_worker = File_worker.Reclam_taker()
+            text = my_file_worker.get_text()
+
+        my_vec_worker = Vec_worker.Tree_analyser()
+        text_vec = my_vec_worker.take_words_vec(text)
+
+        my_database_worker = Data_base_worker.DB_worker()
+        groups_vecs = my_database_worker.get_vecs()
+
+        num = self.ui.spinBox.value
+        result = Vec_worker.find_nearest(num, groups_vecs, text_vec)
+
+        my_result_window = ResultWindow()
+        my_result_window.ui.textBrowser.text = ' text'
+        my_result_window.show()
 
 
 class ResultWindow(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.ui = uic.loadUi('resultwindow.ui')
+        self.ui = uic.loadUi(my_path + 'resultwindow.ui')
         self.ui.pushButton.clicked.connect(self.save)
         self.ui.pushButton_2.clicked.connect(self.close)
 
     def write_result(self, result):
         self.ui.textBrowser.text = result  # !!! join ...
 
-    def save(self):
+    def save(self, result):
         pass
 
     def close(self):
@@ -133,11 +152,20 @@ class ResultWindow(QDialog):
 
 
 if __name__ == "__main__":
-    app = QtGui.QGuiApplication(sys.argv)
     mw = MainWindow()
-    app.exec_()
-    pass
-"""
+    library = threading.Thread(target=Vec_worker.library_prepearing, args=(mw.ui.pushButton_2, dict_path))
+    library.setDaemon(True)
+
+    library.start()
+
+    mw.show()
+    sys.exit(app.exec_())
+    """
+    while library in threading.enumerate():
+        time.sleep(1)
+        print('.')
+
+
 if __name__ == "__main__":
     actions_dict = {1: [1, 2, 3, 9], 2: [], 3: [], 9: []}
     print("Добро пожаловать в рекламный анализатор соц. сетей")

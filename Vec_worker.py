@@ -61,15 +61,14 @@ class Tree_analyser():
                 self.middleVect(word_vects))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return self.middleVect(sentance_vects)
 
-    def start(self, work_wind):
-        pass
 
 
-def library_prepearing():
+def library_prepearing(button, path):
     global model
     print("Загрузка начинается")
-    model = gensim.models.KeyedVectors.load_word2vec_format(r'ru_dicts\ruscorpora_mean_hs.model.bin', binary=True)
+    model = gensim.models.KeyedVectors.load_word2vec_format(path, binary=True)
     print("Загрузка завершена")
+    #button.setEnabled(True)
     return model
 
 
