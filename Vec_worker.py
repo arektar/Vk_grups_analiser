@@ -43,14 +43,18 @@ class Tree_analyser():
             i += 1
         return np.array(middle_veclist, dtype='float')
 
-    def take_groups_vecs(self, groups_base):
-        vecs_base = {}
-        for group in groups_base:
-            posts_vects = []
-            for post in groups_base[group]:
-                posts_vects.append(self.take_words_vec(post))  # !!!!!!!!!!!!!
-            vecs_base[group] = self.middleVect(posts_vects)
-        return vecs_base
+    def take_group_vec(self, group_base):
+        posts_vects = []
+        for post in group_base:
+            if post:
+                post_vec = self.take_words_vec(post)
+                if post_vec != []:
+                    posts_vects.append(post_vec)  # !!!!!!!!!!!!!
+        if posts_vects != []:
+            group_vec = self.middleVect(posts_vects)
+            return group_vec
+        else:
+            return -1
 
     def take_words_vec(self, text):
         sentance_vects = []
@@ -59,27 +63,31 @@ class Tree_analyser():
             if len(word_vects) < 1: continue
             sentance_vects.append(
                 self.middleVect(word_vects))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return self.middleVect(sentance_vects)
+        if sentance_vects:
+            return self.middleVect(sentance_vects)
+        else:
+            return []
 
 
-
-def library_prepearing(button, path):
+def library_prepearing(button1, button2, path):
     global model
     print("Загрузка начинается")
     model = gensim.models.KeyedVectors.load_word2vec_format(path, binary=True)
     print("Загрузка завершена")
-    #button.setEnabled(True)
+    button1.setEnabled(True)
+    button2.setEnabled(True)
     return model
 
 
 def find_nearest(number, groups_vecdict, text_vec):  # !!!
     simularity_dict = {}
-    for vec in groups_vecdict:
-        similarity = cosine_similarity(vec[1], text_vec)
-        simularity_dict[vec] = similarity
+    for group in groups_vecdict:
+        similarity = cosine_similarity(groups_vecdict[group], text_vec)
+        simularity_dict[group] = abs(similarity)
     second = lambda x: x[1]
     nearest_list = sorted(simularity_dict.items(), key=second, reverse=True)
-    return nearest_list[:number]
+    nearest_list = nearest_list[:number]
+    return nearest_list
 
 
 if __name__ == "__main__":

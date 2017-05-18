@@ -1,3 +1,4 @@
+# -*- coding: utf-8-*-
 import os
 from os import path
 
@@ -14,14 +15,13 @@ class Reclam_taker():
         return text
 
     def from_text_file(self):
-        with open(self.reclam_path) as text_file:
-            reclam = text_file.read()
-        return reclam
+        with open(self.reclam_path,encoding='utf-8') as text_file:
+            text = text_file.read()
+        return text
 
-def write_result(simularity_dict):
-    with open('result.txt') as result_file:
-        for group in simularity_dict:
-            result_file.write(group, )
+def write_result(text):
+    with open('result.html','a+') as result_file:
+        result_file.write(text)
 
 
 if __name__ == "__main__":

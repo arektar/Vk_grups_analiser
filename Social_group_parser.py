@@ -77,6 +77,24 @@ class VkParser():
         print(new_groups_ids_set)
         return new_groups_ids_set
 
+    def wall_request(self, group_data):
+        try:
+            posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
+        except vk.exceptions.VkAPIError as error:
+            if error.code == 6:  # Слишком частые запросы
+                time.sleep(0.7)
+                print("!!!")
+                posts = self.wall_request(group_data)
+            elif error.code == 15:  # Закрытое сообщество
+                posts = "Closed_Wall"
+            else:
+                raise
+        except requests.exceptions.ReadTimeout:  # Не дождались ответа от ВК
+            time.sleep(0.7)
+            print("???")
+            posts = self.wall_request(group_data)
+        return posts
+
     def get_new_groups_posts(self, target):
         """
         :param target:
@@ -94,30 +112,22 @@ class VkParser():
                 fields="deactivated,activity,age_limits,activity,age_limits,city,country,description,"
                        "members_count,self.public_date_label,site,status,verified,wiki_page")
             for group_data in groups_data:
-                try:
-                    name = group_data[u'id']
-                    posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
-                except vk.exceptions.VkAPIError as error:
-                    if error.code == 6:  # Слишком частые запросы
-                        time.sleep(0.5)
-                        name = group_data[u'id']
-                        posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
-                    elif error.code == 15:  # Закрытое сообщество
-                        posts = "Closed_Wall"
-                    else:
-                        raise
-                except requests.exceptions.ReadTimeout:  # Не дождались ответа от ВК
-                    time.sleep(0.5)
-                    name = group_data[u'id']
-                    posts = self.vk_api.wall.get(owner_id=-group_data['id'], count=100)[u'items']
+                name = group_data[u'id']
+                posts = self.wall_request(group_data)
                 groups_posts_base[name] = posts
-                self.db_worker.write_group_to_base(group_data, groups_posts_base)
         except:
             raise
-        return groups_posts_base
+        return groups_data, groups_posts_base
 
     def start(self, param, work_wind):
-        pass
+        groups, posts = self.get_new_groups_posts(param)
+        work_wind.progress.value = 70
+        my_db_worker = DB_worker()
+        for group in groups:
+            post = posts[group['id']]
+            my_db_worker.write_group_to_base(group, post)
+
+        work_wind.close()
 
 
 if __name__ == "__main__":

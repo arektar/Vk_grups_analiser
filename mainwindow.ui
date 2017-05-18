@@ -40,22 +40,25 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Добавить группы в базу</string>
+        <string>Добавить сообщества в базу</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">
        <property name="text">
-        <string>Обновить вектора в базе</string>
+        <string>Обновить тематическую базу</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_3">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
-        <string>Найти сообщества,
- соответствующие тексту</string>
+        <string>Поиск сообществ,
+ по заданному тексту</string>
        </property>
       </widget>
      </item>

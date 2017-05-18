@@ -7,7 +7,9 @@ import Data_base_worker
 import time
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QScrollBar
 from File_worker import Reclam_taker
 import getpass
 import os
@@ -29,62 +31,63 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.update_vecs)
         self.ui.pushButton_3.clicked.connect(self.compare_vecs)
         self.ui.pushButton_2.setEnabled(False)
-        #self.show()
+        self.ui.pushButton_3.setEnabled(False)
+        self.result = {}
+        # self.show()
 
     def add_groups(self):
-        con_wind = ConnectionPropertiesWindow()
+        self.con_wind = ConnectionPropertiesWindow()
+        # con_wind.setWindowModality(Qt.WindowModal)
+        self.con_wind.show()
 
     def update_vecs(self):
-        work_wind = WorkingWindow()
+        self.work_wind = WorkingWindow()
 
         my_text_worker = Text_parser.Text_analyser()
-        groups_base = my_text_worker.start(work_wind)
-
-        my_vec_taker = Vec_worker.Tree_analyser()
-        my_vec_taker.start(work_wind, groups_base)
+        my_text_worker.start(self.work_wind)
 
     def compare_vecs(self):
-        ComparePropertiesWindow()
+        self.my_compare_property_wind = ComparePropertiesWindow()
+        self.my_compare_property_wind.show()
 
 
 class ConnectionPropertiesWindow(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.ui = uic.loadUi( my_path + 'login_password.ui', self)
-        self.ui.lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.ui = uic.loadUi(my_path + 'login_password.ui', self)
+        # self.ui.lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
         self.ui.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.ui.buttonBox.accepted.connect(self.check_and_continue)
+        self.ui.buttonBox.accepted.connect(self.check)
+        self.error_edit = self.ui.label_3
+        self.work_wind = WorkingWindow()
         self.show()
 
     def check(self):
-        user_login = self.ui.lineEdit.text
-        user_password = self.ui.lineEdit_2.text
-        error_edit = self.ui.lineEdit_3
+        user_login = self.ui.lineEdit.text()
+        user_password = self.ui.lineEdit_2.text()
         if user_login == '':
-            error_edit.text = "Введите логин!!!"
+            self.error_edit.text = "Введите логин!!!"
         elif user_password == '':
-            error_edit.text = "Введите пароль!!!"
-        elif (not self.ui.radioButton.checked) and (not self.ui.radioButton_2.checked):
-            error_edit.text = "Выберите источник сообществ!!!"
+            self.error_edit.text = "Введите пароль!!!"
+        elif (not self.ui.radioButton.isDown) and (not self.ui.radioButton_2.isDown):
+            self.error_edit.text = "Выберите источник сообществ!!!"
         else:
             param = 4
-            if self.ui.radioButton_2.checked:
+            if self.ui.radioButton_2.isDown:
                 param -= 2
-            if self.ui.radioButton_2.checked:
+            if self.ui.radioButton_2.isDown:
                 param -= 1
-
             self.start(user_login, user_password, param)
 
     def start(self, user_login, user_password, param):
-        work_wind = WorkingWindow()
-        work_wind.show()
+        self.work_wind.show()
         try:
             groups_parser = Social_group_parser.VkParser(user_login, user_password)
         except:
             self.error_edit.text = "Ошибка авторизации!!!"
-            work_wind.close()
+            self.work_wind.close()
             return
-        groups_parser.start(param, work_wind)
+        groups_parser.start(param, self.work_wind)
 
 
 class WorkingWindow(QDialog):
@@ -93,73 +96,159 @@ class WorkingWindow(QDialog):
         self.ui = uic.loadUi(my_path + 'working.ui', self)
         self.progress = self.ui.progressBar
         self.info = self.ui.label
-        self.show()
+        self.result = ''
+
+    def start_process(self, Worker, worker_args):
+        self.thread = QThread(self)
+        self.worker = Worker()
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.process)
+        self.worker.end.connect(self.get_result)
+        self.worker.end.connect(self.thread.quit)
+        self.worker.end.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.message.connect(self.update_progress)
+        self.thread.start()
+
+    def update_progress(self, mess):
+        self.progress.setValue(mess[1])
+        self.info.setText(mess[0])
+
+    def get_result(self, data):
+        self.close()
+        result_groups, result = data
+        self.my_result_window = ResultWindow()
+        self.my_result_window.write_result(result_groups, result)
+        self.my_result_window.show()
 
 
 class ComparePropertiesWindow(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.ui = uic.loadUi(my_path + 'login_password.ui', self)
+        self.ui = uic.loadUi(my_path + 'start_compare.ui', self)
         self.ui.buttonBox.accepted.connect(self.check)
-        self.show()
 
     def check(self):
-        if (self.ui.textBrowser.text == '') or (self.ui.lineEdit.text == ''):
+        path = self.ui.lineEdit.text()
+        text = self.ui.textBrowser.toPlainText()
+        if (text == '') and (path == ''):
             self.ui.error_lable.text = "Введите текст \nили путь к текстовону \nфайлу"
         elif self.ui.spinBox.value == 0:
             self.ui.error_lable.text = "Выбарите количество \nискомых сообществ"
-        elif (self.ui.users_text.text != '') or (self.ui.lineEdit.text != ''):
+        elif (text != '') and (path != ''):
             self.ui.error_lable.text = "Сравнивается только один текст. \nСотрите либо текст, либо путь к файлу."
         else:
-            self.start()
+            self.start(path, text)
 
-    def start(self):
-
-        text = self.ui.textBrowser.text != ''
+    def start(self, path, text):
         if not text:
-            my_file_worker = File_worker.Reclam_taker()
+            my_file_worker = File_worker.Reclam_taker(path)
             text = my_file_worker.get_text()
 
-        my_vec_worker = Vec_worker.Tree_analyser()
-        text_vec = my_vec_worker.take_words_vec(text)
-
-        my_database_worker = Data_base_worker.DB_worker()
-        groups_vecs = my_database_worker.get_vecs()
-
-        num = self.ui.spinBox.value
-        result = Vec_worker.find_nearest(num, groups_vecs, text_vec)
-
-        my_result_window = ResultWindow()
-        my_result_window.ui.textBrowser.text = ' text'
-        my_result_window.show()
+        global user_text, user_num
+        user_text = text
+        user_num = self.ui.spinBox.value()
+        global result_groups, result
+        result_groups = ''
+        result = ''
+        self.work_wind = WorkingWindow()
+        self.work_wind.show()
+        self.work_wind.start_process(Worker, text)
 
 
 class ResultWindow(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.ui = uic.loadUi(my_path + 'resultwindow.ui')
+        self.ui = uic.loadUi(my_path + 'resultwindow.ui', self)
         self.ui.pushButton.clicked.connect(self.save)
-        self.ui.pushButton_2.clicked.connect(self.close)
+        self.show()
 
-    def write_result(self, result):
-        self.ui.textBrowser.text = result  # !!! join ...
+    def write_result(self, result_groups, result):
+        text = '<html>'
+        for each in result:
+            group = each[0]
+            text += "<b>Сообщество: </b>%s<br /> " % result_groups[group].name
+            text += "<b>Близость: </b>%f<br />" % each[1]
+            text += "<b>Пользователей: </b>%i<br />" % result_groups[group].members_count
+            #text += "<b>Ссылка: </b> <a href={0}>{0}</a><br />".format(result_groups[group].link)
+            text += "<b>Ссылка: </b>%s<br />" % result_groups[group].link
+            if result_groups[group].description != '--':
+                description = result_groups[group].description
+                description = description.replace('\n', "<br />")
+                text += "<b>Описание: </b>%s<br />" % description
+            if result_groups[group].age_limits != 0:
+                text += "<b>Возрастное ограничение: </b>%i+<br />" % result_groups[group].age_limits
+            if result_groups[group].country != '--':
+                text += "<b>Страна: </b>%s<br />" % result_groups[group].country
+            if result_groups[group].city != '--':
+                text += "<b>Город: </b>%s<br />" % result_groups[group].city
+            if result_groups[group].group_type != '--':
+                text += "<b>Тип: </b>%s<br />" % result_groups[group].group_type
+            if result_groups[group].site != '--':
+                #text += "<b>Личный сайт: </b><a href={0}>{0}</a><br />".format(result_groups[group].site)
+                text += "<b>Личный сайт: </b>%s<br />" % result_groups[group].site
+            text += '<br />'
+        text += '</html>'
+        self.text = text
+        self.ui.textBrowser.append(text)
+        scroll = self.ui.textBrowser.verticalScrollBar()
+        i = QScrollBar.SliderToMinimum
+        scroll.triggerAction(QScrollBar.SliderToMinimum)
 
-    def save(self, result):
-        pass
+    def save(self):
+        File_worker.write_result(self.text)
 
-    def close(self):
-        pass
+
+class Worker(QObject):
+    end = pyqtSignal(tuple)
+    message = pyqtSignal(tuple)
+
+    @pyqtSlot()
+    def process(self):
+        print('START')
+        mess = ('Подготовка текста', 0)
+        self.message.emit(mess)
+        my_text_worker = Text_parser.Text_analyser()
+        prepared_text = my_text_worker.prepareText(user_text)
+        self.num = user_num
+
+        mess = ('Векторизация пользовательского текста', 20)
+        self.message.emit(mess)
+        my_vec_worker = Vec_worker.Tree_analyser()
+        text_vec = my_vec_worker.take_words_vec(prepared_text)
+
+        mess = ('Чтение векторов сообществ из базы', 30)
+        self.message.emit(mess)
+        my_database_worker = Data_base_worker.DB_worker()
+        groups_vecs = my_database_worker.get_vecs()
+
+        mess = ('Поиск ближайших векторов сообществ', 60)
+        self.message.emit(mess)
+        result = Vec_worker.find_nearest(self.num, groups_vecs, text_vec)
+
+        mess = ('Получение информации о ближайших сообществах', 85)
+        self.message.emit(mess)
+        result_groups = [i[0] for i in result]
+        result_groups = my_database_worker.get_groups_data(result_groups)
+
+        mess = ('Готово', 100)
+        self.message.emit(mess)
+        print('FINISHED')
+        data = (result_groups, result)
+        self.end.emit(data)
 
 
 if __name__ == "__main__":
     mw = MainWindow()
-    library = threading.Thread(target=Vec_worker.library_prepearing, args=(mw.ui.pushButton_2, dict_path))
+    library = threading.Thread(target=Vec_worker.library_prepearing,
+                               args=(mw.ui.pushButton_2, mw.ui.pushButton_3, dict_path))
     library.setDaemon(True)
 
     library.start()
 
     mw.show()
     sys.exit(app.exec_())
+
     """
     while library in threading.enumerate():
         time.sleep(1)

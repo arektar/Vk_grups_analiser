@@ -83,6 +83,7 @@ class Text_analyser():
             if stop_pos == -1:
                 stop_pos = len(text)
                 not_end = False
+                sentence_list.append(text)
             if stop_pos == 1:
                 text = text[stop_pos:]
                 continue
@@ -95,7 +96,7 @@ class Text_analyser():
 
     def easy_tokenizer(self, text):
         pause_sym = [u",", u".", u"!", u"?", u";", u":", u"(", u")", u"[", u"]", u"'", u'"', u"<", u">", u"{", u"}",
-                     u"-", u"«", u"»"]
+                     u"-", u"«", u"»", u"—", u"-"]
         tokens = text.split()
         i = 0
         while i < len(tokens):
@@ -105,7 +106,7 @@ class Text_analyser():
                 token = token[:-1]
                 tokens[i] = token
                 tokens.insert(i + 1, sym)
-            while token[0] in pause_sym and len(token) > 1:
+            if token[0] in pause_sym and len(token) > 1:
                 sym = token[0]
                 token = token[1:]
                 tokens[i] = token
@@ -134,17 +135,17 @@ class Text_analyser():
         my_vec_taker = Vec_worker.Tree_analyser()
         my_db_worker = Data_base_worker.DB_worker()
         base = my_db_worker.get_walls()
-        prepared_groups_texts = {}
         #work_wind.progress.value = 10
+        print(len(base))
         for group in base:
             wall = base[group]
-            prepared_groups_texts[group] = []
+            prepared_group_texts = []
             for post in wall:
                 prepared_post_text = self.prepareText(post)
-                prepared_groups_texts[group].append(prepared_post_text)
-        vec_base = my_vec_taker.take_groups_vecs(prepared_groups_texts)
-        for group in vec_base:
-            my_db_worker.write_vec_story(group,vec_base[group])
+                prepared_group_texts.append(prepared_post_text)
+            print(group)
+            group_vec = my_vec_taker.take_group_vec(prepared_group_texts)
+            my_db_worker.write_vec_story(group, group_vec)
 
 
 if __name__ == "__main__":
